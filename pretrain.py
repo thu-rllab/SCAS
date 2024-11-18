@@ -25,8 +25,8 @@ parser.add_argument('--no_normalize', default=False, action='store_true')
 parser.add_argument('--eval_data', default=0.0, type=float) # proportion of data used for evaluation
 args = parser.parse_args()
 
-work_dir = '../runs/{}/{}/{}/eval{}_norm{}_seed{}'.format(
-     os.getcwd().split('/')[-1], 'pretrain', args.env, args.eval_data, not args.no_normalize, args.seed)
+work_dir = './runs/{}/{}/norm{}_seed{}'.format(
+     'pretrain', args.env, not args.no_normalize, args.seed)
 writer = SummaryWriter(work_dir)
 with open(os.path.join(work_dir, 'args.json'), 'w') as f:
     json.dump(vars(args), f, sort_keys=True, indent=4)
@@ -101,6 +101,6 @@ for step in tqdm(range(args.num_iters + 1), desc='train'):
                 writer.add_scalar('pretrain/eval_loss', loss.item(), step)
             dynamics.train()
     if step == args.num_iters:
-        if not os.path.isdir('../SCAS_dynamics'):
-            os.makedirs('../SCAS_dynamics')
-        torch.save(dynamics.state_dict(), '../SCAS_dynamics/dynamics_%s_norm%s.pt' % (args.env, not args.no_normalize))
+        if not os.path.isdir('./SCAS_dynamics'):
+            os.makedirs('./SCAS_dynamics')
+        torch.save(dynamics.state_dict(), './SCAS_dynamics/dynamics_%s_norm%s.pt' % (args.env, not args.no_normalize))

@@ -47,7 +47,7 @@ if __name__ == "__main__":
 	
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--env", default="hopper-medium-v2")        # OpenAI gym environment name
-	parser.add_argument("--seed", default=1, type=int)              # Sets Gym, PyTorch and Numpy seeds
+	parser.add_argument("--seed", default=0, type=int)              # Sets Gym, PyTorch and Numpy seeds
 	parser.add_argument("--eval_freq", default=2e4, type=int)       # How often (time steps) we evaluate
 	parser.add_argument("--eval_episodes", default=10, type=int)
 	parser.add_argument("--max_timesteps", default=1e6, type=int)   # Max time steps to run environment
@@ -56,7 +56,6 @@ if __name__ == "__main__":
 	parser.add_argument("--tau", default=0.005)                     # Target network update rate
 	parser.add_argument("--policy_freq", default=2, type=int)       # Frequency of delayed policy updates
 	parser.add_argument("--no_normalize", action="store_true")
-	parser.add_argument('--no_schedule', action="store_true")
 	parser.add_argument('--temp', default=5.0, type=float)
 	parser.add_argument('--lam', default=0.25, type=float)
 	parser.add_argument('--beta', default=3e-3, type=float)
@@ -67,8 +66,8 @@ if __name__ == "__main__":
 	print("---------------------------------------")
 
 	env = gym.make(args.env)
-	work_dir = './runs/{}/lam{}_temp{}_beta{}_norm{}_seed{}'.format(
-     args.env, args.lam, args.temp, args.beta, not args.no_normalize, args.seed)
+	work_dir = './runs/{}/{}/lam{}_temp{}_beta{}_norm{}_seed{}'.format(
+     'train_rl', args.env, args.lam, args.temp, args.beta, not args.no_normalize, args.seed)
 	# Set seeds
 	env.seed(args.seed)
 	env.action_space.seed(args.seed)
@@ -113,7 +112,6 @@ if __name__ == "__main__":
 		"discount": args.discount,
 		"tau": args.tau,
 		"policy_freq": args.policy_freq,
-		"schedule": not args.no_schedule,
 		"dynamics": dynamics,
 		"antmaze": antmaze,
 		"temp": args.temp,
